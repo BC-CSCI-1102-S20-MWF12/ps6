@@ -11,7 +11,7 @@ public class RealQueueCA<T> implements RealQueue<T> {
     int size;       // size of the real queue
 
     // constructor
-    public UnfairQueueArray () {
+    public RealQueueCA () {
       // You want to create an array, but you aren't allowed to
       // create an array of a generic type, so this is a way around that.
       // Create an array of Objects that you then cast to type T
