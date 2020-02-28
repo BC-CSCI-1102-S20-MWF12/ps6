@@ -3,7 +3,7 @@
 
 ---
 
-In this problem set, you will be implementing the kind of queue you encounter a lot in real life. You are standing in line, when you see that another line is starting to form in a different direction behind someone in front of you in line. The people in that new line start merging into your line. Some people in your line might be nice and let a few people in. Others are territorial and refuse to let anyone cut in line. I find that this happens a lot when waiting for the escalator after you get off the subway. People are coming from several different directions, and they all need to merge into a single line. This is the type of queue you will be modeling for this problem set.
+In this problem set, you will be implementing the kind of queue you encounter a lot in real life. You are standing in line, when you see that another line is starting to form in a different direction behind someone in front of you in line. The people in that new line start merging into your line. Some people in your line might be nice and let someone in front of them. Others are territorial and refuse to let anyone cut in line. I find that this happens a lot when waiting for the escalator after you get off the subway. People are coming from several different directions, and they all need to merge into a single line. This is the type of queue you will be modeling for this problem set.
 
 ### The `RealQueue` ADT and interface
 
@@ -32,18 +32,22 @@ Each element in the argument `RealQueue` (henceforth **RQ2**) will have to be ad
 
 1. Find the middle element of RQ1. (See below for how to identify the middle element.)
 
-2. Using a random number, decide whether the front element of RQ2 should be allowed to cut in front of that middle element of RQ1. If the answer is yes (i.e., the random number is greater than or equal to 0.5), then insert that element of RQ2 into RQ1 in front of the middle element. If the answer is no, then the element from RQ2 will have to try to cut in front of the next element in  RQ1. Keep repeating this until all the elements from RQ2 have been inserted into RQ1. If you end up running out of elements in RQ1 to try to cut in front of, then just add the rest of RQ2 to the tail of RQ1.
+2. Using a random number, decide whether the front element of RQ2 should be allowed to cut in front of that middle element of RQ1. If the answer is no, then the element from RQ2 will have to try to cut in front of the next element in  RQ1. If the answer is yes (i.e., the random number is greater than or equal to 0.5), then insert that element of RQ2 into RQ1 in front of the middle element. Move on to the next elements in line in RQ1 and RQ2. Keep repeating this until all the elements from RQ2 have been inserted into RQ1. If you end up running out of elements in RQ1 to try to cut in front of, then just add the rest of RQ2 to the tail of RQ1.
 
 3. Once you have merged RQ1 with RQ2, RQ2 should be empty, and RQ1 should contain all of its own elements and all of RQ2's former elements.
 
+### Some rules:
+* The elements in RQ2 must be in the same order relative to each other once they have been merged into RQ1.
+* No element in RQ1 will allow more than one element from RQ2 to cut in front of it. Therefore, there can be no adjacent elements of RQ2 appearing in RQ1 except after the tail of RQ1.
+
 ### How do I find the "middle" element?
 
-When you have an odd number of elements, the middle element is unambiguous. For example, the middle element of 5 elements is the third element; if the elements from front to tail are `A B C D E`, the middle element is always `C`. If you have an even number of elements, however, the middle is ambiguous: in a list that is `A B C D E F` from front to tail, you could say the middle element is `C` or `D`. For this problem set, we'll say it's always the element that is further back in line, which in this case would be `D`.
+When you have an odd number of elements, the middle element is unambiguous. For example, the middle element of 5 elements is the third element; if the elements from front to tail are `A B C D E`, the middle element is always `C`. If you have an even number of elements, however, the middle is ambiguous: in a list that is `A B C D E F` from front to tail, you could say the middle element is `C` or `D`. For this problem set, we'll say it's always the element that is further back in line (i.e., closer to the tail), which in this case would be `D`.
 
-To figure out which one is the middle element, you can experiment with integer division or with the `Math.floor()` and `Math.ceil()` methods in conjunction with casting to `double`. You can also experiment with adding 1 or 2 to the size before doing the integer division.
+To figure out which one is the middle element, you can experiment with integer division or with the `Math.floor()` and `Math.ceil()` methods in conjunction with casting to `double`. You can also experiment with adding 1 or 2 to the size before doing the integer division. You should be able to find a single solution whether the queue has an even or add number of elements.
 
 ### How to get to the middle element: linked list
-You can traverse the linked list or you can keep an additional pointer to the middle Node, along with the pointer to front and tail. Inserting elements will be straightforward, of course, but don't forget that this is a doubly-linked list.
+You can traverse the linked list (from the tail, of course!) or you can keep an additional pointer to the middle Node, along with the pointer to front and tail. Inserting elements will be straightforward, of course, but don't forget that this is a doubly-linked list.
 
 ### How to get to the middle element: circular array
 You can either have an additional instance variable to keep track of the middle, or you can calculate it on the fly as needed from the indices for front and tail. Keep in mind that this could get complicated if front or tail has wrapped around. The modulus operator might be helpful! 
@@ -53,6 +57,15 @@ Even though this is a circular array, will need to shift some elements in RQ1 ov
 
 ### Don't forget the special cases
 If your queue is empty, remember that `dequeue()` and `getFront()` should either throw an exception or return null. There might be some other special cases, so think about these carefully!
+
+### Casting to type T
+When you try to access elements with `dequeue()` and `getFront()`, you will need to cast them to type `T`, e.g.,
+
+```java
+T frontelement = (T) myqueue.getFront();
+```
+
+This will trigger some warnings at compilation that you can ignore.
 
 ### Writing additional methods
 You are more than welcome to write additional methods that you might find useful.
